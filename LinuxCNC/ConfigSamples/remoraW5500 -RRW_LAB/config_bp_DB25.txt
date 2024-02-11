@@ -84,7 +84,7 @@
 		"Comment":			"USR_BTN",
 		"Pin":				"PA00",
 		"Mode":				"Input",
-		"Data Bit":			5,
+		"Data Bit":			6,
 		"Invert":			"False"
 	},
 	{
