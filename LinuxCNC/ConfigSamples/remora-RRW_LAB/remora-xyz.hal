@@ -1,0 +1,164 @@
+
+# load the realtime components
+
+	loadrt [KINS]KINEMATICS
+	loadrt [EMCMOT]EMCMOT base_period_nsec=[EMCMOT]BASE_PERIOD servo_period_nsec=[EMCMOT]SERVO_PERIOD num_joints=[KINS]JOINTS
+
+	#loadrt remora 
+
+	#loadrt remora-rpispi SPI_clk_div=32 PRU_base_freq=40000
+	loadrt remora chip_type=STM SPI_clk_div=32 PRU_base_freq=40000	
+	loadrt PRUencoder names=encoderS0
+
+
+	
+
+# estop loopback, SPI comms enable and feedback
+	net user-enable-out 	<= iocontrol.0.user-enable-out		=> remora.SPI-enable
+	net user-request-enable <= iocontrol.0.user-request-enable	=> remora.SPI-reset
+	net remora-status 	<= remora.SPI-status 			=> iocontrol.0.emc-enable-in
+	
+
+# add the remora and motion functions to threads
+
+	addf remora.read servo-thread
+	addf PRUencoder.capture-position servo-thread
+	addf motion-command-handler servo-thread
+	addf motion-controller servo-thread
+	addf remora.update-freq servo-thread
+	addf remora.write servo-thread
+	
+# Joint 0 setup
+
+	setp remora.joint.0.scale 		[JOINT_0]SCALE
+	setp remora.joint.0.maxaccel 	[JOINT_0]STEPGEN_MAXACCEL
+	setp remora.joint.0.deadband 	[JOINT_0]DEADBAND
+	setp remora.joint.0.pgain 		[JOINT_0]P_GAIN
+	setp remora.joint.0.ff1gain 	[JOINT_0]FF1_GAIN
+
+
+	net xpos-cmd 		<= joint.0.motor-pos-cmd 	=> remora.joint.0.pos-cmd  
+	net j0pos-fb 		<= remora.joint.0.pos-fb 	=> joint.0.motor-pos-fb
+	net j0enable 		<= joint.0.amp-enable-out 	=> remora.joint.0.enable
+	
+
+
+# Joint 1 setup
+
+	setp remora.joint.1.scale 		[JOINT_1]SCALE
+	setp remora.joint.1.maxaccel 	[JOINT_1]STEPGEN_MAXACCEL
+	setp remora.joint.1.deadband 	[JOINT_1]DEADBAND
+	setp remora.joint.1.pgain 		[JOINT_1]P_GAIN
+	setp remora.joint.1.ff1gain 	[JOINT_1]FF1_GAIN
+
+	net j1pos-cmd 		<= joint.1.motor-pos-cmd 	=> remora.joint.1.pos-cmd
+	net j1pos-fb 		<= remora.joint.1.pos-fb 	=> joint.1.motor-pos-fb 
+	net j1enable 		<= joint.1.amp-enable-out 	=> remora.joint.1.enable
+
+# Joint 2 setup
+
+	setp remora.joint.2.scale 		[JOINT_2]SCALE
+	setp remora.joint.2.maxaccel 	[JOINT_2]STEPGEN_MAXACCEL
+	setp remora.joint.1.deadband 	[JOINT_2]DEADBAND
+	setp remora.joint.1.pgain 		[JOINT_2]P_GAIN
+	setp remora.joint.1.ff1gain 	[JOINT_2]FF1_GAIN
+
+	net j2pos-cmd 		<= joint.2.motor-pos-cmd 	=> remora.joint.2.pos-cmd
+	net j2pos-fb 		<= remora.joint.2.pos-fb 	=> joint.2.motor-pos-fb
+	net j2enable 		<= joint.2.amp-enable-out 	=> remora.joint.2.enable
+
+
+
+
+#######################################################
+# end-stops and inputs
+#######################################################
+
+	net X_HOME 	remora.input.00 	=> joint.0.home-sw-in 
+	net Y_HOME 	remora.input.01 	=> joint.1.home-sw-in 
+	net Z_HOME 	remora.input.02 	=> joint.2.home-sw-in 
+	net IN1 	remora.input.03 	#=> 
+	net IN2 	remora.input.04 	#=> 
+	net IN3 	remora.input.05 	#=> 
+	net USR_BTN	remora.input.06 	#=> 
+
+#######################################################
+# stepgen enable and other outputs
+#######################################################
+
+	net j0enable => remora.output.00 	
+
+	net OUT1 	remora.output.01 	#=> 
+	net OUT2 	remora.output.02 	#=> 
+
+#######################################################
+# spindle encoder
+#######################################################
+
+# scale encoder output to read in revolutions 
+setp encoderS0.position-scale [SPINDLE_0_ENCODER]ENCODER_SCALE
+
+# connect the hal encoder to linuxcnc
+# connect encoder count to pv.5 
+net encoder-count <= remora.PV.5 => encoderS0.raw_count
+# connect encoder index/z 
+net encoder-phaseZ <= remora.input.15 => encoderS0.phase-Z
+
+#######################################################
+# do the spindle stuff 
+#######################################################
+
+# need to fix
+# conenct remora out1 to spindle on
+net spindle-on <= spindle.0.on => 	remora.output.01 
+# connect spindle stuff to linuxcnc
+#net spindle-cmd-rpm     <= spindle.0.speed-out
+net spindle-cmd-rpm-abs <= spindle.0.speed-out-abs
+net spindle-cmd-rps     <= spindle.0.speed-out-rps
+net spindle-cmd-rps-abs <= spindle.0.speed-out-rps-abs
+net spindle-at-speed    => spindle.0.at-speed
+net spindle-cw <= spindle.0.forward
+
+#spindle PWM 0-100 control
+loadrt scale names=scale_to_rpm.0,scale-rpm
+addf scale-rpm servo-thread
+# configure spindle rpm to pwm 
+# pwm 100 / max rpm = gain number 
+setp scale-rpm.gain 0.022222 # 100/ rpm (4500) = .022222222
+net spindle-speed-scale spindle.0.speed-out => scale-rpm.in
+# connect pwm to remora spindle pwm SP.0
+net spindle-speed-abs scale-rpm.out => remora.SP.0
+
+#wip
+#######################################################
+# Beginning of threading related stuff  
+#######################################################
+# spindle speed control
+#net spindle.0.cmd  spindle.0.speed-out => sim_encoder_0.speed
+#loadrt limit2 names=limit_speed
+#addf limit_speed servo-thread
+# simulate spindle mass
+#setp limit_speed.maxv 500.0 # rpm/second
+
+
+# encoder reset control
+# hook up motion controller's sync output
+net spindle-index-enable encoderS0.index-enable <=> spindle.0.index-enable
+
+# report our revolution count to the motion controller
+net spindle-position encoderS0.position => spindle.0.revs
+
+#net spindle-velocity-feedback-rps encoderS0.velocity => spindle.0.speed-in
+
+# for spindle velocity estimate
+loadrt lowpass names=lowpass_velocity.0
+#loadrt scale names=scale_to_rpm.0
+net spindle-rps-raw.0 encoderS0.velocity lowpass_velocity.0.in
+net spindle-rps-filtered.0 lowpass_velocity.0.out scale_to_rpm.0.in spindle.0.speed-in
+net spindle-rpm-filtered.0 scale_to_rpm.0.out
+setp scale_to_rpm.0.gain 60
+setp lowpass_velocity.0.gain .07
+addf lowpass_velocity.0 servo-thread
+addf scale_to_rpm.0 servo-thread
+
+

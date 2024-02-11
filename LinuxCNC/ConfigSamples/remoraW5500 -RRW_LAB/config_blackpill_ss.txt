@@ -1,0 +1,116 @@
+{
+	"Board": "BLACKPILL F411 STEPSTICK",
+	"Modules":[
+	{
+	"Thread": "Base",
+	"Type": "Stepgen",
+		"Comment":			"X - Joint 0 step generator",
+		"Joint Number":		0,
+		"Step Pin": 		"PA01",
+		"Direction Pin": 	"PA02"
+	},
+	{
+	"Thread": "Base",
+	"Type": "Stepgen",
+		"Comment":			"Y - Joint 1 step generator",
+		"Joint Number":		1,
+		"Step Pin": 		"PA03",
+		"Direction Pin": 	"PA04"
+	},
+	{
+	"Thread": "Base",
+	"Type": "Stepgen",
+		"Comment":			"Z - Joint 2 step generator",
+		"Joint Number":		2,
+		"Step Pin": 		"PA05",
+		"Direction Pin": 	"PA06"
+	},
+	{
+	"Thread": "Servo",
+	"Type": "Digital Pin",
+		"Comment":			"X_Limit",
+		"Pin":				"PC14",
+		"Mode":				"Input",
+		"Data Bit":			0,
+		"Invert":			"False"
+	},
+	{
+	"Thread": "Servo",
+	"Type": "Digital Pin",
+		"Comment":			"Y_Limit",
+		"Pin":				"PC15",
+		"Mode":				"Input",
+		"Data Bit":			1,
+		"Invert":			"True"
+	},
+	{
+	"Thread": "Servo",
+	"Type": "Digital Pin",
+		"Comment":			"Z_Limit",
+		"Pin":				"PA15",
+		"Mode":				"Input",
+		"Data Bit":			2,
+		"Invert":			"False"
+	},
+	{
+	"Thread": "Servo",
+	"Type": "Digital Pin",
+		"Comment":			"IN1",
+		"Pin":				"PB03",
+		"Mode":				"Input",
+		"Data Bit":			3,
+		"Invert":			"False"
+	},
+	{
+	"Thread": "Servo",
+	"Type": "Digital Pin",
+		"Comment":			"IN2",
+		"Pin":				"PB04",
+		"Mode":				"Input",
+		"Data Bit":			4,
+		"Invert":			"False"
+	},
+	{
+	"Thread": "Servo",
+	"Type": "Digital Pin",
+		"Comment":			"IN3",
+		"Pin":				"PB06",
+		"Mode":				"Input",
+		"Data Bit":			5,
+		"Invert":			"False"
+	},
+	{
+	"Thread": "Servo",
+	"Type": "Digital Pin",
+		"Comment":			"USR_BTN",
+		"Pin":				"PA00",
+		"Mode":				"Input",
+		"Data Bit":			6,
+		"Invert":			"False"
+	},
+	{
+	"Thread": "Servo",
+	"Type": "Digital Pin",
+		"Comment":			"STEP_ENA",
+		"Pin":				"PA07",
+		"Mode":				"Output",
+		"Data Bit":			0
+	},	
+	{
+	"Thread": "Servo",
+	"Type": "Digital Pin",
+		"Comment":			"OUT1,
+		"Pin":				"PB01",
+		"Mode":				"Output",
+		"Data Bit":			1
+	},
+	{
+	"Thread": "Servo",
+	"Type": "Digital Pin",
+		"Comment":			"OUT2",
+		"Pin":				"PB02",
+		"Mode":				"Output",
+		"Data Bit":			2
+	}
+	]
+}
