@@ -3,15 +3,19 @@
 
 RRW_LAB aka Remora RPi/W5500 LinuxCNC Adapter Board is a CNC controller board for use with LinuxCNC, in conjunction with a STM32 Blackpill board as the MCU to interface with Ethernet or Raspberry Pi. The board exists for the single purpose to promote the Remora project, with he design goals to be  affordable, easy to make, and accessible while still retaining the core features.
 
-Documentation https://github.com/cakeslob/Remora-docs/blob/nucleo/docs/source/hardware/blackpill.rst
+- The board is not made for performance, it was made to work  adequately, with a simple setup.
+- The board is still in beta testing; pinout, configs, firmware, formfactor, etc are likely to change in the future. 
 
-Remora RPi SPI Firmware Source  https://github.com/cakeslob/Remora/tree/blackpill
 
-Remora W5500 Ethernet Firmware Source  https://github.com/cakeslob/Remora-STM32F4xx-W5500/tree/blackpill
+- Documentation https://github.com/cakeslob/Remora-docs/blob/nucleo/docs/source/hardware/blackpill.rst
 
-Pre-Compiled Firmware located in /FirmwareBin
+- Remora RPi SPI Firmware Source  https://github.com/cakeslob/Remora/tree/blackpill
 
-LinuxCNC configurations and Components located in /LinuxCNC/
+- Remora W5500 Ethernet Firmware Source  https://github.com/cakeslob/Remora-STM32F4xx-W5500/tree/blackpill
+
+- Pre-Compiled Firmware located in /FirmwareBin/
+
+- LinuxCNC configurations and Components located in /LinuxCNC/
 
 <img src="/boards.jpg" >
 
