@@ -59,6 +59,8 @@ Stepstick Version:
 
 # Pinout
 
+Note: V0.1 has wrong pins assigned to the hardware encoder. This will be changed with v0.3
+
 - Stepstick
      <img src="/RRW_LAB_SS_v01/rrw_lab_ssv01_pinout.png" >
 
