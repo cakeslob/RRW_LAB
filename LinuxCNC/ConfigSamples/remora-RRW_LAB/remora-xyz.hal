@@ -110,7 +110,7 @@ net encoder-phaseZ <= remora.input.15 => encoderS0.phase-Z
 
 # need to fix
 # conenct remora out1 to spindle on
-net spindle-on <= spindle.0.on => 	remora.output.01 
+/net spindle-on <= spindle.0.on => 	remora.output.01 
 # connect spindle stuff to linuxcnc
 #net spindle-cmd-rpm     <= spindle.0.speed-out
 net spindle-cmd-rpm-abs <= spindle.0.speed-out-abs
