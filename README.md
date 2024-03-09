@@ -66,7 +66,7 @@ Stepstick Version:
 Note: V0.1 has wrong pins assigned to the hardware encoder. This will be changed with v0.3
 
 - Stepstick
-     <img src="/RRW_LAB_SS_v01/rrw_lab_ssv01_pinout.png" >
+     <img src="/RRW_LAB_STEPSTICK/v01/rrw_lab_ssv01_pinout.png" >
 
 - DB25
-     <img src="/RRW_LAB_DB25_v01/rrw_lab_db25v01_pinout.png" >  
+     <img src="/RRW_LAB_DB25/rrw_lab_db25v01_pinout.png" >  
