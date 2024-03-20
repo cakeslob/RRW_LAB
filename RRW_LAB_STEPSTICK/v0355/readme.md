@@ -76,9 +76,16 @@ To configure the hardware for UART configuration, remove all the microstep jumpe
 
 <img src="/RRW_LAB_STEPSTICK/v0355/images/io.png" width="500">
 
+On the 2x6 pin header, these pins are meant to be GPIO, used for limit switches and such. The other pins are ground These pins are unprotected, they operate at 3.3v but can safely tolerate 5v. 
+
 ### PWM Spindle Control
 
+On the 4 pin header marked "SPINDLE" the pins are Ground, PWM, OUT1, and OUT2.  These pins are intended to be used with spindle. This is not to only pin that can output PWM, and the pins can be reconfigured to be used as regular GPIO if needed. These pins are unprotected, they operate at 3.3v but can safely tolerate 5v.
+
 ### Highspeed Encoder
+
+On the 5 pin header marked "ENCODER", the pins are Ground, Encoder chA, Encoder chB, Encoder chZ, and 5v. They connect to the boards hardware encoder pins, and can be used with a highspeed encoder to do things like spindle sync, or closedloop axis.  The pins can be reconfigured to be used as regular GPIO if needed. These pins are unprotected, they operate at 3.3v but can safely tolerate 5v.
+
 
 ## Configuration/Interface
 
