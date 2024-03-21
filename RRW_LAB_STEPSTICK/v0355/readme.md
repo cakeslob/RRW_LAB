@@ -14,7 +14,9 @@ Features include :
 - 1 Spindle PWM
 - SD card option
 - Ethernet adapter option
-- RaspberryPi GPIO header for direct mounting.
+- RaspberryPi GPIO header for direct mounting
+
+Note that features are mere suggestions, you can configure the pins to be what ever you want as long as there are not hardware conflictions
 
 ## RRW_LAB overview
 
@@ -76,7 +78,9 @@ To configure the hardware for UART configuration, remove all the microstep jumpe
 
 <img src="/RRW_LAB_STEPSTICK/v0355/images/io.png" width="500">
 
-On the 2x6 pin header, these pins are meant to be GPIO, used for limit switches and such. The other pins are ground These pins are unprotected, they operate at 3.3v but can safely tolerate 5v. 
+On the 2x6 pin header, these pins are meant to be GPIO, used for limit switches and such. The other pins are ground. These pins, like most pins on the board, The pins are unprotected, they operate at 3.3v but can safely tolerate 5v. 
+
+
 
 ### PWM Spindle Control
 
@@ -87,15 +91,30 @@ On the 4 pin header marked "SPINDLE" the pins are Ground, PWM, OUT1, and OUT2.  
 On the 5 pin header marked "ENCODER", the pins are Ground, Encoder chA, Encoder chB, Encoder chZ, and 5v. They connect to the boards hardware encoder pins, and can be used with a highspeed encoder to do things like spindle sync, or closedloop axis.  The pins can be reconfigured to be used as regular GPIO if needed. These pins are unprotected, they operate at 3.3v but can safely tolerate 5v.
 
 
-## Configuration/Interface
 
-### SD Card 
+## SD Card 
 
 <img src="/RRW_LAB_STEPSTICK/v0355/images/sd2.png" width="500">
 
-### W5500 Ethernet Module 
+The optional addition of an SD card reader module allows you to edit your pin configuration the config.txt file stored on the root of the card. This enables you to change the pins how you like without the need to compile firmware. It also offers the most support for different firmware modules. Refer to the Remora documents to read more about the supported firmware modules. 
+
+The board was designed with a specific SD card module, commonly avaiable. Other units may work, but they must be 3.3v. 
+This is the SD card unit, designed to be soldered to the underside of the board
+
+<img src="/RRW_LAB_STEPSTICK/v0355/images/sd3.png" width="500">
+
+<img src="/RRW_LAB_STEPSTICK/v0355/images/sd_solder.jpg" width="500">
+
+
+## W5500 Ethernet Module 
 
 <img src="/RRW_LAB_STEPSTICK/v0355/images/w5500.png" width="500">
+
+The optional addation of the W5500 ethernet adapter allows you to communicate with the board over ethernet to any computer (not just an RPi). The adapter can be installed using 2 1x6 headers, or it can be soldered directly to the RRW_LAB. Soldering to the board is recomended for long term use. 
+
+picture ethernet adapter
+
+<img src="/RRW_LAB_STEPSTICK/v0355/images/w5500_install.jpg" width="500">
 
 ### Serial Port
 
