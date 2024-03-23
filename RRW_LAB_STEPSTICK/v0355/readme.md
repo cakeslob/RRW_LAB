@@ -20,15 +20,16 @@ Note that features are mere suggestions, you can configure the pins to be what e
 
 ## RRW_LAB overview
 
-image pcb
 <img src="/RRW_LAB_STEPSTICK/v0355/images/pcb.png"  width="500">
 
-image pcb2
+
 <img src="/RRW_LAB_STEPSTICK/v0355/images/pcb2.png"  width="500">
 
 
-image pinout
+
 <img src="/RRW_LAB_STEPSTICK/v0355/images/pinout.png"  width="500">
+
+pinout
 
 
 ### STM32F411 MCU
