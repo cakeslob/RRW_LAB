@@ -68,7 +68,7 @@ The RRW_LAB uses Pololu style stepper drivers, such as those used on 3d printers
 To configure the hardware for step/direction, add a jumper to the sleep/reset pin, and configure your microsteps accordingly. 
 
 ### UART Configuration
-<img src="/RRW_LAB_STEPSTICK/v0355/images/uart.png" width="500">
+<img src="/RRW_LAB_STEPSTICK/v0355/images/uart.png" width="700">
 
 <img src="/RRW_LAB_STEPSTICK/v0355/images/stepstick_uart.png" width="500">
 
