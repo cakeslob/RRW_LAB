@@ -24,7 +24,7 @@ Features:
 
 - 2 board variants 
 - Ethernet or Raspberry Pi SPI interface
-- STM32 Blackpill F4x1 or Blupill F103 as MCU
+- STM32 Blackpill F4x1 as MCU
 - 3 to 5 axis
 - 8 Digital IO
 - 1 Highspeed encoder
@@ -61,12 +61,4 @@ Stepstick Version:
     <img src="/photos/cncboard_ss_2a.jpg" > 
 
 
-# Pinout
 
-Note: V0.1 has wrong pins assigned to the hardware encoder. This will be changed with v0.3
-
-- Stepstick
-     <img src="/RRW_LAB_STEPSTICK/v01/rrw_lab_ssv01_pinout.png" >
-
-- DB25
-     <img src="/RRW_LAB_DB25/rrw_lab_db25v01_pinout.png" >  
