@@ -1,6 +1,6 @@
 # RRW_LAB StepStick v0.355
 
-picture of board
+<img src="/RRW_LAB_STEPSTICK/v0355/images/p1.jpg"  width="700">
 
 Remora RaspberryPi/W5500 LinuxCNC Adapter Board , aka RRW_LAB is meant to be a lowcost, easy to make, CNC controller to run with LinuxCNC/Remora firmware. The board is made in a way to demonstrate the key features of the LinuxCNC/Remora firmware, while still being a functional cnc controller. It is meant to be on the same level as the classic "Arduino CNC Shield v3.00" but with the power of Linuxcnc/Remora firmware. 
 
@@ -20,14 +20,14 @@ Note that features are mere suggestions, you can configure the pins to be what e
 
 ## RRW_LAB overview
 
-<img src="/RRW_LAB_STEPSTICK/v0355/images/pcb.png"  width="500">
+<img src="/RRW_LAB_STEPSTICK/v0355/images/pcb.png"  width="600">
 
 
-<img src="/RRW_LAB_STEPSTICK/v0355/images/pcb2.png"  width="500">
+<img src="/RRW_LAB_STEPSTICK/v0355/images/pcb2.png"  width="600">
 
 
 
-<img src="/RRW_LAB_STEPSTICK/v0355/images/pinout.png"  width="500">
+<img src="/RRW_LAB_STEPSTICK/v0355/images/pinout.png"  width="700">
 
 pinout
 
