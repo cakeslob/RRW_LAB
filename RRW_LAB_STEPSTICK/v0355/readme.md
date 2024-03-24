@@ -27,7 +27,7 @@ Note that features are mere suggestions, you can configure the pins to be what e
 
 
 
-<img src="/RRW_LAB_STEPSTICK/v0355/images/pinout.png"  width="700">
+<img src="/RRW_LAB_STEPSTICK/v0355/images/pinout.png"  width="750">
 
 pinout
 
