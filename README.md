@@ -35,7 +35,10 @@ Features:
 
 # Variants:
 
-Stepstick Version:
+Stepstick Version: v0.355
+
+Readme : 
+https://github.com/cakeslob/RRW_LAB/blob/main/RRW_LAB_STEPSTICK/v0355/readme.md
 
 - 3 Axis with Pololu stepper moter driver support (stepstick)
 - 6 Inputs
