@@ -1,3 +1,4 @@
+
 {
 	"Board": "RRW_LAB STEPSTICK v0.355",
 	"Modules":[
@@ -95,6 +96,14 @@
 		"Mode":				"Input",
 		"Data Bit":			5
 	},
+	{
+    "Thread": "Servo",
+    "Type": "PWM",
+            "Comment":                      "PWM0",
+            "SP[i]":                        0,
+            "PWM Pin":                      "PB_0",
+            "PWM Max":                      256
+ 	},
 	{
     "Thread": "Servo",
     "Type": "QEI",
