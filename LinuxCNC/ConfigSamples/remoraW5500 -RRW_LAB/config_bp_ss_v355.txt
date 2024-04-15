@@ -1,0 +1,102 @@
+
+{
+	"Board": "RRW_LAB STEPSTICK v0.355" W5500,
+	"Modules":[
+
+	{
+	"Thread": "Base",
+	"Type": "Stepgen",
+		"Comment":			"X DRIVER0 - Joint 0 step generator",
+		"Joint Number":		0,
+		"Step Pin": 		"PA_4",
+		"Direction Pin": 	"PA_3"
+	},
+	{
+	"Thread": "Base",
+	"Type": "Stepgen",
+		"Comment":			"Y DRIVER1 - Joint 1 step generator",
+		"Joint Number":		1,
+		"Step Pin": 		"PA_6",
+		"Direction Pin": 	"PA_5"
+	},
+	{
+	"Thread": "Base",
+	"Type": "Stepgen",
+		"Comment":			"Z DRIVER2 - Joint 2 step generator",
+		"Joint Number":		2,
+		"Step Pin": 		"PB_1",
+		"Direction Pin": 	"PA_7"
+	},
+	{
+	"Thread": "Servo",
+	"Type": "Digital Pin",
+            "Comment":                      "STEPPER ENABLE",
+            "Pin":                          "PB_2",
+            "Mode":                         "Output",
+            "Modifier":                     "Pull Up",
+            "Invert":                       "True",
+            "Data Bit":                     0
+    	},
+	{
+	"Thread": "Servo",
+	"Type": "Digital Pin",
+		"Comment":			"X LIMIT",
+		"Pin":				"PB_9",
+           	"Modifier":                     "Pull Up",
+		"Mode":				"Input",
+		"Data Bit":			0
+	},
+	{
+	"Thread": "Servo",
+	"Type": "Digital Pin",
+		"Comment":			"Y LIMIT",
+		"Pin":				"PB_8",
+            	"Modifier":                     "Pull Up",
+		"Mode":				"Input",
+		"Data Bit":			1
+	},
+	{
+	"Thread": "Servo",
+	"Type": "Digital Pin",
+		"Comment":			"Z LIMIT",
+		"Pin":				"PB_7",
+            	"Modifier":                     "Pull Up",
+		"Mode":				"Input",
+		"Data Bit":			2
+	},
+	{
+	"Thread": "Servo",
+	"Type": "Digital Pin",
+		"Comment":			"IN1",
+		"Pin":				"PB_6",
+           	"Modifier":                     "Pull Up",
+		"Mode":				"Input",
+		"Data Bit":			3
+	},
+	{
+	"Thread": "Servo",
+	"Type": "Digital Pin",
+		"Comment":			"IN2",
+		"Pin":				"PB_4",
+         	"Modifier":                     "Pull Up",
+		"Mode":				"Input",
+		"Data Bit":			4
+	},
+	{
+	"Thread": "Servo",
+	"Type": "Digital Pin",
+		"Comment":			"IN3",
+		"Pin":				"PB_3",
+            	"Modifier":                     "Pull Up",
+		"Mode":				"Input",
+		"Data Bit":			5
+	},
+	{
+    "Thread": "Servo",
+    "Type": "Spindle PWM",
+            "Comment":                      "PWM0",
+            "SP[i]":                        0
+ 	}
+
+	]
+}

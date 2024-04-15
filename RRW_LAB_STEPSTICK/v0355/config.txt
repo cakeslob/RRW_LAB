@@ -1,6 +1,6 @@
 
 {
-	"Board": "RRW_LAB STEPSTICK v0.355",
+	"Board": "RRW_LAB STEPSTICK v0.355 RPi",
 	"Modules":[
 	{
 	"Thread": "Servo",

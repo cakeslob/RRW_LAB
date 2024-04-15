@@ -80,7 +80,7 @@
 	net IN1 	remora.input.03 	#=> 
 	net IN2 	remora.input.04 	#=> 
 	net IN3 	remora.input.05 	#=> 
-	net USR_BTN	remora.input.06 	#=> 
+
 
 #######################################################
 # stepgen enable and other outputs

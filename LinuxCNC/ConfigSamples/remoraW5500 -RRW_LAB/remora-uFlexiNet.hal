@@ -29,8 +29,10 @@ loadrt [EMCMOT]EMCMOT base_period_nsec=[EMCMOT]BASE_PERIOD servo_period_nsec=[EM
 
 	setp remora.joint.0.scale 		[JOINT_0]SCALE
 	setp remora.joint.0.maxaccel 	[JOINT_0]STEPGEN_MAXACCEL
-	setp remora.joint.0.pgain		300
-	setp remora.joint.0.ff1gain			.2
+	setp remora.joint.0.deadband 	[JOINT_0]DEADBAND
+	setp remora.joint.0.pgain 		[JOINT_0]P_GAIN
+	setp remora.joint.0.ff1gain 	[JOINT_0]FF1_GAIN
+
 
 	net j0pos-cmd 		joint.0.motor-pos-cmd 	=> remora.joint.0.pos-cmd
 	net j0pos-fb 		remora.joint.0.pos-fb 	=> joint.0.motor-pos-fb
@@ -41,9 +43,9 @@ loadrt [EMCMOT]EMCMOT base_period_nsec=[EMCMOT]BASE_PERIOD servo_period_nsec=[EM
 
 	setp remora.joint.1.scale 		[JOINT_1]SCALE
 	setp remora.joint.1.maxaccel 	[JOINT_1]STEPGEN_MAXACCEL
-	setp remora.joint.1.pgain		300
-	setp remora.joint.1.ff1gain			.2
-
+	setp remora.joint.1.deadband 	[JOINT_1]DEADBAND
+	setp remora.joint.1.pgain 		[JOINT_1]P_GAIN
+	setp remora.joint.1.ff1gain 	[JOINT_1]FF1_GAIN
 	net j1pos-cmd 		joint.1.motor-pos-cmd 	=> remora.joint.1.pos-cmd
 	net j1pos-fb 		remora.joint.1.pos-fb 	=> joint.1.motor-pos-fb
 	net j1enable 		joint.1.amp-enable-out 	=> remora.joint.1.enable
@@ -53,8 +55,9 @@ loadrt [EMCMOT]EMCMOT base_period_nsec=[EMCMOT]BASE_PERIOD servo_period_nsec=[EM
 
 	setp remora.joint.2.scale 		[JOINT_2]SCALE
 	setp remora.joint.2.maxaccel 	[JOINT_2]STEPGEN_MAXACCEL
-	setp remora.joint.2.pgain		300
-	setp remora.joint.2.ff1gain			.2
+	setp remora.joint.1.deadband 	[JOINT_2]DEADBAND
+	setp remora.joint.1.pgain 		[JOINT_2]P_GAIN
+	setp remora.joint.1.ff1gain 	[JOINT_2]FF1_GAIN
 
 	net j2pos-cmd 		joint.2.motor-pos-cmd 	=> remora.joint.2.pos-cmd
 	net j2pos-fb 		remora.joint.2.pos-fb 	=> joint.2.motor-pos-fb
@@ -68,7 +71,7 @@ loadrt [EMCMOT]EMCMOT base_period_nsec=[EMCMOT]BASE_PERIOD servo_period_nsec=[EM
 	net IN1 	remora.input.03 	#=> 
 	net IN2 	remora.input.04 	#=> 
 	net IN3 	remora.input.05 	#=> 
-	net USR_BTN	remora.input.06 	#=> 
+	
 
 # stepgen enable and other outputs
 
