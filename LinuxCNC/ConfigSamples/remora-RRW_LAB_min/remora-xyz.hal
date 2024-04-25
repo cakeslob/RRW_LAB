@@ -50,7 +50,6 @@
 	setp remora.joint.1.deadband 	[JOINT_1]DEADBAND
 	setp remora.joint.1.pgain 		[JOINT_1]P_GAIN
 	setp remora.joint.1.ff1gain 	[JOINT_1]FF1_GAIN
-
 	net j1pos-cmd 		<= joint.1.motor-pos-cmd 	=> remora.joint.1.pos-cmd
 	net j1pos-fb 		<= remora.joint.1.pos-fb 	=> joint.1.motor-pos-fb 
 	net j1enable 		<= joint.1.amp-enable-out 	=> remora.joint.1.enable

@@ -1,6 +1,6 @@
 
 {
-	"Board": "RRW_LAB STEPSTICK v0.35x" W5500,
+	"Board": "RRW_LAB STEPSTICK v0.35x W5500",
 	"Modules":[
 
 	{
