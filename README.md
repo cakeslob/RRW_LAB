@@ -13,7 +13,7 @@ RRW_LAB aka Remora RPi/W5500 LinuxCNC Adapter Board is a CNC controller board fo
 
 - Remora RPi SPI SD card Firmware Source https://github.com/cakeslob/Remora/tree/rrw_lab_sd
 
-- Remora W5500 Ethernet Firmware Source  https://github.com/cakeslob/Remora-STM32F4xx-W5500/tree/blackpill
+- Remora W5500 Ethernet Firmware Source  https://github.com/cakeslob/Remora-STM32F4xx-W5500/tree/bp2
 
 - Pre-Compiled Firmware located in /FirmwareBin/
 
