@@ -1,44 +1,5 @@
-#ifndef BOARDCONFIG_H
-#define BOARDCONFIG_H
 
-#include "pin.h"
-
-
-struct StepgenConfig {
-    const char* Comment;
-    const int JointNumber;
-    const char* StepPin;
-    const char* DirectionPin;
-}; 
-
-struct EncoderConfig {
-    const char* Comment;
-    const char* PinA;
-    const char* PinB;
-    const int Modifier; // OPENDRAIN, PULLUP, PULLDOWN, PULLNONE, NONE
-};
-
-struct DigitalPinConfig {
-    const char* Comment;
-    const char* Pin;
-    const int Modifier; // OPENDRAIN, PULLUP, PULLDOWN, PULLNONE, NONE
-    const bool Invert;
-    const int DataBit;
-};
-
-struct PWMPinConfig {
-    const char* Comment;
-    const char* Pin; 
-    const int Peroid_sp;
-};
-
-struct BlinkPinConfig {
-    const char* Comment;
-    const char* Pin;
-    const int Freq;
-};
-
-//Module config
+BOARD CONFIG
 
 #define BOARD "BLACKPILLF411 STEPSTICK PCBv0355"
 
