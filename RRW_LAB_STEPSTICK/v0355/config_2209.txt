@@ -130,6 +130,14 @@
 	},
 	{
     "Thread": "Servo",
+    "Type": "PWM",
+            "Comment":                      "PWM0",
+            "SP[i]":                        0,
+            "PWM Pin":                      "PB_0",
+            "PWM Max":                      256
+ 	},
+	{
+    "Thread": "Servo",
     "Type": "QEI",
             "Comment":                      "Spindle encoder",
             "Modifier":                     "Pull Up",
