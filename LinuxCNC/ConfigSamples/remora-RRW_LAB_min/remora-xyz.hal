@@ -58,9 +58,9 @@
 
 	setp remora.joint.2.scale 		[JOINT_2]SCALE
 	setp remora.joint.2.maxaccel 	[JOINT_2]STEPGEN_MAXACCEL
-	setp remora.joint.1.deadband 	[JOINT_2]DEADBAND
-	setp remora.joint.1.pgain 		[JOINT_2]P_GAIN
-	setp remora.joint.1.ff1gain 	[JOINT_2]FF1_GAIN
+	setp remora.joint.2.deadband 	[JOINT_2]DEADBAND
+	setp remora.joint.2.pgain 		[JOINT_2]P_GAIN
+	setp remora.joint.2.ff1gain 	[JOINT_2]FF1_GAIN
 
 	net j2pos-cmd 		<= joint.2.motor-pos-cmd 	=> remora.joint.2.pos-cmd
 	net j2pos-fb 		<= remora.joint.2.pos-fb 	=> joint.2.motor-pos-fb
@@ -88,4 +88,4 @@
 	net j0enable => remora.output.00 	
 
 	net OUT1 	remora.output.01 	#=> 
-	net OUT2 	remora.output.02 	#=> 
+	net OUT2 	remora.output.02 	#=>
