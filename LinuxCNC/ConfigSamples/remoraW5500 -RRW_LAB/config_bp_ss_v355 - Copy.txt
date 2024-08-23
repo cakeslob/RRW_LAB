@@ -1,0 +1,32 @@
+
+{
+	"Board": "skr2",
+	"Modules":[
+
+	{
+	"Thread": "Base",
+	"Type": "Stepgen",
+		"Comment":			"X DRIVER0 - Joint 0 step generator",
+		"Joint Number":		0,
+		"Step Pin": 		"PE02",
+		"Direction Pin": 	"PE01"
+	},
+	{
+	"Thread": "Base",
+	"Type": "Stepgen",
+		"Comment":			"Y DRIVER1 - Joint 1 step generator",
+		"Joint Number":		1,
+		"Step Pin": 		"PD05",
+		"Direction Pin": 	"PD04"
+	},
+	{
+	"Thread": "Base",
+	"Type": "Stepgen",
+		"Comment":			"Z DRIVER2 - Joint 2 step generator",
+		"Joint Number":		2,
+		"Step Pin": 		"PB01",
+		"Direction Pin": 	"PA07"
+	}
+
+	]
+}
