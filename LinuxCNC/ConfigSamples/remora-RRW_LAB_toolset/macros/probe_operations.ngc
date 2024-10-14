@@ -1,0 +1,53 @@
+(author: Julian Koenig)
+(version: 2.0)
+(date: 30.05.2024)
+
+
+o<probe_operations> sub
+
+o100 if [#1 EQ 1]  (midpoint)
+  o110 if [#1999 EQ 0]
+    #1999 = 11
+    M130 P254 (clear messages)
+    (debug,Probe the first point or click the midpoint button to skip the first probe if you want to use the current zero point as the first point.)
+    M130 P[#1999] (send state to hal)
+  o110 elseif [#1999 EQ 11]
+    #1999 = 12
+    M130 P254 (clear messages)
+    (debug,Probe a second point that is compareable to the first one.)
+    M130 P[#1999] (send state to hal)
+  o110 endif
+o100 elseif [#1 EQ 2]   (rotation)
+  o120 if [#1999 EQ 0]
+    #1999 = 21
+    M130 P254 (clear messages)
+    (debug,Probe the first point or click the rotation button to skip the first probe if you want to use the current zero point as the first point.)
+    M130 P[#1999] (send state to hal)
+  o120 elseif [#1999 EQ 21]
+    #1999 = 22
+    M130 P254 (clear messages)
+    (debug,Probe a second point. The rotation will be set so that the coresponding axis will be pointing towards the second probed point.)
+    M130 P[#1999] (send state to hal)
+  o120 endif
+o100 else   (distance)
+  o130 if [#1999 EQ 0]
+    #1999 = 31
+    M130 P254 (clear messages)
+    (debug,MEASURING mode. All measurements will refer to the current zero point. If you need to set the zero point, abort the operation, set the zero point in the desired WCS and restart the distance operation.)
+    (debug,Click again for LOGGING mode. Your prior      , logfile will be ERASED.)
+    M130 P[#1999] (send state to hal)
+    G92.1
+  o130 elseif [#1999 EQ 31]
+    #1999 = 32
+    M130 P254 (clear messages)
+    (debug,LOGGING mode.)
+    M130 P[#1999] (send state to hal)
+    (LOGOPEN,probe_results.txt)
+    (LOG,Proberesults of easyprobe:)
+    (LOG,--------------------------)
+    (LOGCLOSE)
+  o130 endif
+o100 endif
+
+o<probe_operations> endsub
+M2 (end program)

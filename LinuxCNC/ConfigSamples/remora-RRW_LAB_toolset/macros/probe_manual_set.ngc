@@ -1,0 +1,25 @@
+(author: Julian Koenig)
+(version: 2.0)
+(date: 30.05.2024)
+
+o<probe_manual_set> sub
+  o100 if [#1 EQ 0] (X0 Button)
+    G92.1
+    G10 L20 P0 X[#<_hal[pyvcp.probe_offset]>]
+  o100 elseif [#1 EQ 1] (Y0 Button)
+    G92.1
+    G10 L20 P0 Y[#<_hal[pyvcp.probe_offset]>]
+  o100 elseif [#1 EQ 2] (Z0 Button)
+    G92.1
+    G10 L20 P0 Z[#<_hal[pyvcp.probe_offset]>]
+  o100 elseif [#1 EQ 3] (R0 Button)
+    G92.1
+    G10 L2 P0 R[#<_hal[pyvcp.probe_offset]>]
+  o100 endif
+
+  o110 if [[#<_hal[pyvcp.reload]>] EQ 1]
+    M130 P255 (clear plot and reload file)
+  o110 endif
+
+o<probe_manual_set> endsub
+M2 (end program)

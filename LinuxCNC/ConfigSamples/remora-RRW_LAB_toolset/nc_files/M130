@@ -1,0 +1,27 @@
+#!/bin/bash
+# 
+# Q=${2%.*}
+
+P=${1%.*}
+
+case $P in
+
+254)
+# clear messages/notifications
+halcmd setp axisui.notifications-clear True
+sleep 0.1
+halcmd setp axisui.notifications-clear False
+sleep 0.1 ;;
+
+255)
+# clear the backplot and reload the current file
+axis-remote --clear
+sleep 0.1
+axis-remote --reload & ;;
+
+*)
+halcmd sets probe-state $P
+
+esac
+
+exit 0

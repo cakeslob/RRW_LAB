@@ -1,0 +1,40 @@
+# Probe_preload.hal for [easy]probe
+# Author: Hausen 8
+# Version: 1.2
+# Last Edited: 24-06-09
+
+
+
+# ---------- Load realtime components for [easy]probe ----------
+
+loadrt  and2              names=and_probe1,and_probe2,and_probe3
+loadrt  comp              names=comp_probe1,comp_probe2,comp_probe3,comp_tool1,comp_tool2,comp_tool3
+loadrt  conv_u32_float    names=conv_toolnum
+loadrt  dbounce           names=dbounce_probe
+loadrt  lut5              names=lut_inhibit,lut_midpoint,lut_rotation,lut_distance
+loadrt  near              names=near_midpoint,near_rotation,near_distance
+loadrt  not               names=not_act_cal
+loadrt  xor2              names=xor_probe
+
+addf    and_probe1        servo-thread
+addf    and_probe2        servo-thread
+addf    and_probe3        servo-thread
+addf    comp_probe1       servo-thread
+addf    comp_probe2       servo-thread
+addf    comp_probe3       servo-thread
+addf    comp_tool1        servo-thread
+addf    comp_tool2        servo-thread
+addf    comp_tool3        servo-thread
+addf    conv_toolnum      servo-thread
+addf    dbounce_probe     servo-thread
+addf    lut_inhibit       servo-thread
+addf    lut_midpoint      servo-thread
+addf    lut_rotation      servo-thread
+addf    lut_distance      servo-thread
+addf    near_midpoint     servo-thread
+addf    near_rotation     servo-thread
+addf    near_distance     servo-thread
+addf    not_act_cal       servo-thread
+addf    xor_probe         servo-thread
+
+

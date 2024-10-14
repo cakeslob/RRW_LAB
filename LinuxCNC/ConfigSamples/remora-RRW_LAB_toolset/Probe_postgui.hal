@@ -1,0 +1,177 @@
+# Probe_postgui.hal for [easy]probe
+# Author: Hausen 8
+# Version: 1.2
+# Last Edited: 24-06-09
+
+
+# Probe toolsetter stuff
+
+loadrt or2 count=1
+addf or2.0 servo-thread
+
+net probe-in <= remora.input.05
+net length-in <= remora.input.03
+net probe-in => or2.0.in0 
+net length-in => or2.0.in1
+#net probe-or-length <= or2.0.out 
+
+
+# ---------- Probe signal and LED control (see readme.md) ----------
+# dbounce_probe.in must be linked to the probe tool input of the interface card
+
+setp  dbounce_probe.delay      [PROBE]DEBOUNCE_TIME
+setp  xor_probe.in0            [PROBE]PROBE_SWITCH
+
+net   probe-raw                dbounce_probe.in             <=    or2.0.out
+net   probe-switch             dbounce_probe.out            =>    xor_probe.in1
+net   probe-signal             xor_probe.out                =>    motion.probe-input pyvcp.probe_led
+
+
+
+# ---------- Buttons connected to mdi-commands ----------
+
+net   pyvcp-g54                pyvcp.g54                    =>    halui.mdi-command-00
+net   pyvcp-g55                pyvcp.g55                    =>    halui.mdi-command-01
+net   pyvcp-g56                pyvcp.g56                    =>    halui.mdi-command-02
+net   pyvcp-g57                pyvcp.g57                    =>    halui.mdi-command-03
+net   pyvcp-g58                pyvcp.g58                    =>    halui.mdi-command-04
+net   pyvcp-g59                pyvcp.g59                    =>    halui.mdi-command-05
+net   pyvcp-g59.1              pyvcp.g591                   =>    halui.mdi-command-06
+net   pyvcp-g59.2              pyvcp.g592                   =>    halui.mdi-command-07
+net   pyvcp-g59.3              pyvcp.g593                   =>    halui.mdi-command-08
+
+net   pyvcp-tool1              pyvcp.tool1                  =>    halui.mdi-command-09
+net   pyvcp-tool2              pyvcp.tool2                  =>    halui.mdi-command-10
+net   pyvcp-tool3              pyvcp.tool3                  =>    halui.mdi-command-11
+
+net   pyvcp-probe-x            pyvcp.probe_x                =>    halui.mdi-command-12
+net   pyvcp-probe-minus-x      pyvcp.probe_minus_x          =>    halui.mdi-command-13
+net   pyvcp-probe-y            pyvcp.probe_y                =>    halui.mdi-command-14
+net   pyvcp-probe-minus-y      pyvcp.probe_minus_y          =>    halui.mdi-command-15
+net   pyvcp-probe-minus-z      pyvcp.probe_minus_z          =>    halui.mdi-command-16
+net   pyvcp-probe-pocket       pyvcp.probe_pocket           =>    halui.mdi-command-17
+net   pyvcp-probe-midpoint     pyvcp.probe_midpoint         =>    halui.mdi-command-18
+net   pyvcp-probe-rotation     pyvcp.probe_rotation         =>    halui.mdi-command-19
+net   pyvcp-probe-distance     pyvcp.probe_distance         =>    halui.mdi-command-20
+
+net   pyvcp-p0x0               pyvcp.p0x0                   =>    halui.mdi-command-21
+net   pyvcp-p0y0               pyvcp.p0y0                   =>    halui.mdi-command-22
+net   pyvcp-p0z0               pyvcp.p0z0                   =>    halui.mdi-command-23
+net   pyvcp-p0r0               pyvcp.p0r0                   =>    halui.mdi-command-24
+net   pyvcp-escape                                          =>    halui.abort
+net   pyvcp-escape             pyvcp.escape                 =>    halui.mdi-command-25
+
+net   pyvcp-probe-calibration  pyvcp.probe_calib            =>    halui.mdi-command-26
+
+
+
+# ---------- Disable unused probe tool buttons ----------
+# comp_probe1/2/3.equal disables a button when [PROBE]TOOL_NUMBER_1/2/3 = 0
+# comp_probe1/2/3.out sets the first condition to check if a tool exists and is active
+
+setp  comp_probe1.in0          0
+setp  comp_probe2.in0          0
+setp  comp_probe3.in0          0
+
+setp  comp_probe1.in1          [PROBE]TOOL_NUMBER_1
+setp  comp_probe2.in1          [PROBE]TOOL_NUMBER_2
+setp  comp_probe3.in1          [PROBE]TOOL_NUMBER_3
+
+net   disable-tool1            comp_probe1.equal            =>    pyvcp.tool1.disable
+net   disable-tool2            comp_probe2.equal            =>    pyvcp.tool2.disable
+net   disable-tool3            comp_probe3.equal            =>    pyvcp.tool3.disable
+
+net   check-tool1-defined      comp_probe1.out              =>    and_probe1.in0
+net   check-tool2-defined      comp_probe2.out              =>    and_probe2.in0
+net   check-tool3-defined      comp_probe3.out              =>    and_probe3.in0
+
+
+
+# ---------- Inhibit spindle while probe tool is inserted ----------
+# comp_tool1/2/3 checks if [PROBE]TOOL_NUMBER_1/2/3 = halui.tool.number (is the active tool)
+# conv_toolnum is required by comp to convert halui.tool.number from u32 to float
+# lut_inhibit sets spindle-inhibit true when any of the probe tools are defined and active
+
+setp  comp_tool1.in0           [PROBE]TOOL_NUMBER_1
+setp  comp_tool2.in0           [PROBE]TOOL_NUMBER_2
+setp  comp_tool3.in0           [PROBE]TOOL_NUMBER_3
+
+net   tool-u32                 conv_toolnum.in              <=    halui.tool.number
+net   tool-float               conv_toolnum.out             =>    comp_tool1.in1 comp_tool2.in1 comp_tool3.in1
+
+net   check-tool1-active       comp_tool1.equal             =>    and_probe1.in1
+net   check-tool2-active       comp_tool2.equal             =>    and_probe2.in1
+net   check-tool3-active       comp_tool3.equal             =>    and_probe3.in1
+
+setp  lut_inhibit.function     0x16
+
+net   probetool-1-on           lut_inhibit.in-0             <=    and_probe1.out
+net   probetool-2-on           lut_inhibit.in-1             <=    and_probe2.out
+net   probetool-3-on           lut_inhibit.in-2             <=    and_probe3.out
+net   probetool-is-on          lut_inhibit.out              =>    spindle.0.inhibit pyvcp.spindle-inhibit
+
+
+
+# ---------- Spinboxes for probe diameter and zero/offset ----------
+
+net   probe-diameter           pyvcp.probe_diameter         =>
+net   probe-offset             pyvcp.probe_offset           =>
+
+
+
+# ---------- Set machine Units ----------
+setp  pyvcp.units_1.legend1    0
+setp  pyvcp.units_2.legend1    0
+
+
+
+# ---------- Disable invisible buttons that keep probe buttons in a grid ----------
+
+setp  pyvcp.blank_1.disable    1
+setp  pyvcp.blank_2.disable    1
+setp  pyvcp.blank_3.disable    1
+setp  pyvcp.blank_4.disable    1
+setp  pyvcp.blank_5.disable    1
+setp  pyvcp.blank_6.disable    1
+
+
+
+# ---------- Disable midpoint, rotation and distance buttons ----------
+# near watches a range from 1 to 9 of each operation
+# lut disables a button when either machine-is-on = false or any other operation button is pressed
+
+setp near_midpoint.difference  4
+setp near_rotation.difference  4
+setp near_distance.difference  4
+
+setp near_midpoint.in1         15
+setp near_rotation.in1         25
+setp near_distance.in1         35
+
+net  probe-state               near_midpoint.in2            <=
+net  probe-state               near_rotation.in2            <=
+net  probe-state               near_distance.in2            <=
+
+setp lut_midpoint.function     0xFFFFFFFD
+setp lut_rotation.function     0xFFFFFFFD
+setp lut_distance.function     0xFFFFFFFD
+
+net  machine-is-on             halui.machine.is-on          =>    lut_midpoint.in-0 lut_rotation.in-0 lut_distance.in-0
+
+net  state-midpoint            near_midpoint.out            =>    lut_rotation.in-1 lut_distance.in-1
+net  state-rotation            near_rotation.out            =>    lut_midpoint.in-1 lut_distance.in-2
+net  state-distance            near_distance.out            =>    lut_midpoint.in-2 lut_rotation.in-2
+
+net  no-midpoint               lut_midpoint.out             =>    pyvcp.probe_midpoint.disable
+net  no-rotation               lut_rotation.out             =>    pyvcp.probe_rotation.disable
+net  no-distance               lut_distance.out             =>    pyvcp.probe_distance.disable
+
+
+
+# ---------- Enable control for calibration button ----------
+# checkbox bit needs to be inverted to disable the button in unchecked state
+
+net   active-check             pyvcp.act_calib              =>    not_act_cal.in
+net   invert-check             pyvcp.probe_calib.disable    <=    not_act_cal.out
+
+

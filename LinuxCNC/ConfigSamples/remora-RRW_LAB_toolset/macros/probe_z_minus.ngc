@@ -1,0 +1,133 @@
+(author: Julian Koenig; Originally by Chris P - Probe Basic)
+(version: 2.0)
+(date: 05.06.2024)
+
+
+o<probe_z_minus> sub
+  
+  #<max_z_distance>    = #<_ini[probe]MAX_Z_DISTANCE>
+  #<z_clearance>       = #<_ini[probe]Z_CLEARANCE>
+  #<tool_number_1>     = #<_ini[probe]TOOL_NUMBER_1>
+  #<tool_number_2>     = #<_ini[probe]TOOL_NUMBER_2>
+  #<tool_number_3>     = #<_ini[probe]TOOL_NUMBER_3>
+  #<probe_slow_fr>     = #<_ini[probe]VEL_SLOW>
+  #<probe_fast_fr>     = #<_ini[probe]VEL_FAST>
+  (#1999 = probe_state; 1 for default; 11-19 for midpoint; 21-29 for rotation; 31-39 for distance)
+
+  (Safety Check)
+  o<probe_safety_checks> call [0]
+  o100 if [#<_value> EQ 0]
+    o<probe_z_minus> return
+  o100 endif
+  
+
+  o103 if [[#1999 EQ 31] OR [#1999 EQ 32]]  (distance mode)
+  o103 else
+    (Cancel G92 offsets)
+    G92.1
+  o103 endif
+
+
+  o104 if [[#1999 EQ 21] OR [#1999 EQ 22]] (rotation)
+    (debug,Rotation by z operation not possible. Use x/y or pocket operation.)
+    o<probe_z_minus> return
+  o104 endif
+
+  #<workspace_z> = #[5203 + [20 * #5220]]
+
+  (Probe Tool lenght offset check)
+  o110 if [#<_tool_offset> EQ 0]
+    (MSG, Tool length offset "G43" not active, aborting)
+    o<probe_z_minus> return
+  o110 endif
+
+  (Current Z Position including offsets in current program units)
+  #<z> = #5422
+
+
+  (Initial Fast Z- Probe)
+  G91
+  F[#<probe_fast_fr>]
+  G38.2 Z-[#<max_z_distance>]
+  #<z_minus_probed> = #5063
+
+  (Probe Error check, #5070 will be 0 if failed)
+  o120 if [#5070 EQ 0]
+      (back to start point and feed)
+      G90
+      G0 Z#<z>
+      F[#<probe_fast_fr>]
+      (return from sub)
+      o<probe_z_minus> return
+  o120 endif
+
+  (Move to z_clearance height for slow probe)
+  G90
+  G0 Z[#<z_minus_probed> + #<z_clearance>]
+
+  (Slow Probe Rule, if Slow Probe FR is set to 0, Slow Probe is Bypassed)
+  o121 if [#<probe_slow_fr> GT 0]
+      (Initiate Slow Z- Probe)
+      G91
+      F[#<probe_slow_fr>]
+      G38.2 Z-[#<z_clearance> * 2]
+      #<z_minus_probed> = #5063
+      G90
+      G0 Z[#<z_minus_probed> + #<z_clearance>]
+  o121 endif
+
+
+
+
+          
+  o140 if [#1999 EQ 12] (midpoint 2. probe)
+    G10 L20 P#5220 Z[#<_hal[pyvcp.probe_offset]> + #<z_clearance> + [#<z_minus_probed> / 2]]
+    M130 P254 (clear messages)
+    #1999 = 0
+    M130 P[#1999] (send state to hal)
+    o141 if [[#<_hal[pyvcp.reload]>] EQ 1]
+      M130 P255 (clear plot and reload file)
+    o141 endif
+    (debug,Probed distance between points: %.3f#<z_minus_probed>)
+    o<probe_z_minus> return
+  o140 endif
+
+  o160 if [#1999 EQ 31] (distance mode measuring)
+    G52 Z[[#<z_minus_probed>] + [#5213]]    (without G92.1 at the beginning, offsets needs to be calculated in)
+    (5211-5219 - Shared "G52" and "G92" offset for X, Y, Z, A, B, C, U, V & W)
+    #<distance_total> = SQRT[[[#5211]*[#5211]]+[[#5212]*[#5212]]+[[#5213]*[#5213]]]
+    M130 P254 (clear messages)
+    (debug,X /Y /Z //vector length:                                      , %.3f#5211 /%.3f#5212 /%.3f#5213 //%.3f#<distance_total>)
+    (debug,Click again for LOGGING mode. Your prior      , logfile will be ERASED.)
+    o<probe_z_minus> return
+  o160 endif
+
+  o161 if [#1999 EQ 32] (distance mode logging)
+    G52 Z[[#<z_minus_probed>] + [#5213]]
+    #<distance_total> = SQRT[[[#5211]*[#5211]]+[[#5212]*[#5212]]+[[#5213]*[#5213]]]
+    (LOGAPPEND,probe_results.txt)
+    (LOG,X:             #5211)
+    (LOG,Y:             #5212)
+    (LOG,Z:             #5213)
+    (LOG,vector length: #<distance_total>)
+    (LOG,)
+    (LOGCLOSE)
+    o<probe_z_minus> return
+  o161 endif
+
+  o170 if [#1999 EQ 11] (midpoint 1. probe)
+    o<probe_operations>  CALL [1]
+  o170 endif
+
+  (if no special state just set 0)
+  G10 L20 P#5220 Z[#<_hal[pyvcp.probe_offset]> + #<z_clearance>]
+  
+  o180 if [[#<_hal[pyvcp.reload]>] EQ 1]
+    M130 P255 (clear plot and reload file)
+  o180 endif
+
+
+
+
+o<probe_z_minus> endsub
+M2 (end program)

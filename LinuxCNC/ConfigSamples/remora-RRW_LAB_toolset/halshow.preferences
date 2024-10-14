@@ -1,0 +1,57 @@
+# Halshow settings
+# This file is generated automatically.
+wm geometry . 547x379+219+36
+placeFrames 0.43177570093457945
+set ::ratio 0.43177570093457945
+set ::old_w_leftf 219
+set ::watchlist {
+    pin+remora.PV.0
+    pin+remora.PV.1
+    pin+remora.PV.2
+    pin+remora.PV.3
+    pin+remora.PV.4
+    pin+remora.PV.5
+    pin+remora.input.15
+    pin+remora.input.03
+    pin+remora.input.04
+    pin+remora.input.05
+    pin+remora.input.06
+    pin+remora.input.00
+    pin+remora.input.01
+    sig+spindle-position
+    sig+spindle-speed-abs
+    pin+encoderS0.velocity
+    pin+spindle.0.speed-out-abs
+    sig+spindle-cmd-rps-abs
+    sig+spindle-index-enable
+    pin+remora.SP.0
+    pin+spindle.0.speed-cmd-rps
+    sig+spindle-cmd-rpm
+    pin+scale-rpm.gain
+    pin+encoderS0.phase-Z
+    pin+encoderS0.position
+    pin+encoderS0.index-enable
+    pin+lowpass.spindle-encoder-velocity.out
+    pin+spindle.0.speed-out
+    pin+encoderS0.reset
+    param+lowpass.spindle-encoder-velocity.gain
+    pin+spindle.0.speed-out-rps-abs
+    pin+encoderS0.position-scale
+    pin+or2.0.in0
+    pin+or2.0.in1
+    pin+or2.0.out
+    pin+motion.probe-input
+    sig+probe-switch
+    sig+probe-state
+    sig+probe-signal
+    sig+probe-raw
+    sig+tool-number
+    sig+tool-u32
+}
+set ::workmode showhal
+set ::watchInterval 100
+set ::col1_width 100
+set ::ffmts 
+set ::ifmts 
+set ::alwaysOnTop 0
+set ::autoSaveWatchlist 1
