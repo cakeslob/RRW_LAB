@@ -1,0 +1,53 @@
+o<tool_sensor> sub
+
+#<max_probe> = 37
+;#<max_probe> = #<_ini[TOOLSENSOR]maxprobe>
+#<search_vel> = #<_ini[TOOLSENSOR]search_vel>
+#<probe_vel> = #<_ini[TOOLSENSOR]probe_vel>
+;#<sensor_height> = #<_ini[TOOLSENSOR]height>
+#<sensor_height> = 4.8
+#<zero_height> = 44
+#<z_minus_probed> = #5063
+#<zoffset> = #[5203 + [20 * #5220]]
+
+(print, wcs is #<zoffset>)
+(print, 5220 is #5220)
+
+;(print, max_probe is #<max_probe>)
+;(print, search vel is #<search_vel>)
+;(print, probe vel is #<probe_vel>)
+;(print, sensor height is #<sensor_height>)
+;(print, zero height is #<zero_height>)
+
+G21 (use metric units)
+G53 G0 Z44 (raise spindle to Z0)
+G53 G0 X#<_ini[TOOLSENSOR]x> Y#<_ini[TOOLSENSOR]y>
+G49 (cancel tool offset)
+G10 L20 P0 Z0 (clear current offsets)
+G91 (switch to incremental mode)
+
+; this section commented out for sim
+G38.2 Z[-#<max_probe>] F#<search_vel> (probe down)
+G1 Z4.0 (move up 4 mm)
+G4 P0.5 (pause for 0.5 sec.)
+G38.2 Z-6.0 F#<probe_vel> (probe down slower)
+
+; this section used for sim, comment out otherwise
+;G1 Z-10 F#<search_vel>
+
+#<z_minus_probed> = #5063
+(print, offset height is #<z_minus_probed>)
+(print, math offset height is Z[#<sensor_height> + #<zero_height> - -#<z_minus_probed>])
+(print, end)
+G10 L1 P#<_hal[tool-u32]>  Z[#<sensor_height> + #<zero_height> - -#<z_minus_probed>]
+;G10 L11 P#<_hal[tool-u32]> 
+G90 (absolute distance mode)
+G53 G0 Z40 (move Z up to 0)
+
+G10 L2 P0 Z#<zoffset>
+
+(print, return wcs is #<zoffset>)
+(print, return 5220 is #5220)
+
+o<tool_sensor> endsub
+M2

@@ -1,0 +1,105 @@
+<!-- Probe_panel.xml for [easy]probe -->
+<!-- Author: Hausen 8 -->
+<!-- Version: 1.2 -->
+<!-- Last Edited: 24-05-27 -->
+
+
+
+<pyvcp>
+    <tabs>
+        <names>["Easy Probe"]</names>
+        <!-- Beginning of probe tab -->
+        <vbox>
+            <hbox>
+                <button text="G54" width="6" padx="10" halpin="g54" />
+                <button text="G55" width="6" padx="10" halpin="g55" />
+                <button text="G56" width="6" padx="10" halpin="g56" />
+            </hbox>
+            <hbox>
+                <button text="G57" width="6" padx="10" halpin="g57" />
+                <button text="G58" width="6" padx="10" halpin="g58" />
+                <button text="G59" width="6" padx="10" halpin="g59" />
+            </hbox>
+            <hbox>
+                <button text="G59.1" width="6" padx="10" halpin="g591" />
+                <button text="G59.2" width="6" padx="10" halpin="g592" />
+                <button text="G59.3" width="6" padx="10" halpin="g593" />
+            </hbox>
+            <label font="('', 13)" text=" " />
+            <hbox>
+                <button text="Tool 1" width="6" padx="10" halpin="tool1" disable_pin="true" />
+                <button text="Tool 2" width="6" padx="10" halpin="tool2" disable_pin="true" />
+                <button text="Tool 3" width="6" padx="10" halpin="tool3" disable_pin="true" />
+            </hbox>
+            <label font="('', 13)" text=" " />
+            <hbox>
+                <label text="Diameter" width="11" />
+                <spinbox width="10" min_="0" max_="100" initval="25" param_pin="1" format="2.3f" halpin="probe_diameter" />
+                <multilabel halpin="units_1">
+                    <legends>["mm", "in"]</legends>
+                </multilabel>
+            </hbox>
+            <label font="('', 1)" text=" " />
+            <hbox>
+                <label text="Zero/Offset" width="11" />
+                <spinbox width="10" min_="-1000" max_="1000" initval="0" param_pin="1" format="2.3f" halpin="probe_offset" />
+                <multilabel halpin="units_2">
+                    <legends>["mm", "in"]</legends>
+                </multilabel>
+            </hbox>
+            <label text="Press Enter to apply new Values!" width="24" pady="6" />
+            <label font="('', 10)" text=" " />
+            <hbox>
+                <button font="('easyicons', 27)" text="A" padx="1" pady="1" halpin="blank_1" relief="flat" disable_pin="true" />
+                <button font="('easyicons', 27)" text="B" padx="1" pady="1" halpin="probe_y" />
+                <button font="('easyicons', 27)" text="A" padx="1" pady="1" halpin="blank_2" relief="flat" disable_pin="true" />
+                <button font="('easyicons', 27)" text="A" padx="1" pady="1" halpin="blank_3" relief="flat" disable_pin="true" />
+                <button font="('easyicons', 27)" text="E" padx="1" pady="1" halpin="probe_midpoint" disable_pin="true" />
+            </hbox>
+            <hbox>
+                <button font="('easyicons', 27)" text="F" padx="1" pady="1" halpin="probe_minus_x" />
+                <button font="('easyicons', 27)" text="G" padx="1" pady="1" halpin="probe_pocket" />
+                <button font="('easyicons', 27)" text="H" padx="1" pady="1" halpin="probe_x" />
+                <button font="('easyicons', 27)" text="A" padx="1" pady="1" halpin="blank_4" relief="flat" disable_pin="true" />
+                <button font="('easyicons', 27)" text="J" padx="1" pady="1" halpin="probe_rotation" disable_pin="true" />
+            </hbox>
+            <hbox>
+                <button font="('easyicons', 27)" text="A" padx="1" pady="1" halpin="blank_5" relief="flat" disable_pin="true" />
+                <button font="('easyicons', 27)" text="L" padx="1" pady="1" halpin="probe_minus_y" />
+                <button font="('easyicons', 27)" text="A" padx="1" pady="1" halpin="blank_6" relief="flat" disable_pin="true" />
+                <button font="('easyicons', 27)" text="N" padx="1" pady="1" halpin="probe_minus_z" />
+                <button font="('easyicons', 27)" text="O" padx="1" pady="1" halpin="probe_distance" disable_pin="true" />
+            </hbox>
+            <label font="('', 11)" text=" " />
+            <hbox>
+                <button font="('easyicons', 9)" text="0" padx="1" halpin="p0x0" />
+                <button font="('easyicons', 9)" text="1" padx="1" halpin="p0y0" />
+                <button font="('easyicons', 9)" text="2" padx="1" halpin="p0z0" />
+                <button font="('easyicons', 9)" text="3" padx="1" halpin="p0r0" />
+                <button font="('easyicons', 9)" text="4" padx="1" halpin="escape" fg="#ffffff" bg="#ff3000" />
+            </hbox>
+            <label font="('', 13)" text=" " />
+            <hbox>
+                <checkbutton text="Auto reload G-Code / clear Plot" halpin="reload" initval="1" />
+            </hbox>
+            <label font="('', 11)" text=" " />
+            <hbox>
+                <checkbutton text="Activate" width="7" halpin="act_calib" />
+                <button text="Calibration" halpin="probe_calib" disable_pin="true" />
+            </hbox>
+            <label font="('', 13)" text=" " />
+            <hbox>
+                <label text="Probe Signal" width="12" />
+                <rectled width="25" height="25" on_color="#ff3000" off_color="#80b000" halpin="probe_led" />
+            </hbox>
+            <hbox>
+                <label text="Spindle Inhibit" width="12" />
+                <rectled width="25" height="25" on_color="#ff3000" off_color="#80b000" halpin="spindle-inhibit" />
+            </hbox>
+        </vbox>
+        <!-- End of probe tab -->
+    </tabs>
+</pyvcp>
+
+
+

@@ -1,0 +1,41 @@
+
+#######################################################
+# do the spindle stuff 
+#######################################################
+
+# need to fix
+# conenct remora out1 to spindle on
+net spindle-on <= spindle.0.on => 	remora.output.01 
+# connect spindle stuff to linuxcnc
+net spindle-cmd-rpm     <= spindle.0.speed-out
+#net spindle-cmd-rpm-abs <= spindle.0.speed-out-abs
+net spindle-cmd-rps     <= spindle.0.speed-out-rps
+net spindle-cmd-rps-abs <= spindle.0.speed-out-rps-abs
+net spindle-at-speed    => spindle.0.at-speed
+net spindle-cw <= spindle.0.forward =>  remora.output.02 
+
+#spindle PWM 0-100 control
+loadrt scale names=scale_to_rpm.0,scale-rpm
+addf scale-rpm servo-thread
+# configure spindle rpm to pwm 
+# pwm 100 / max rpm = gain number 
+#setp scale-rpm.gain 0.02 # 100/ rpm (5000) = .02
+setp scale-rpm.gain [SPINDLE_0]RPM_GAIN # 100/ rpm (5000) = .02
+
+net spindle-speed-scale spindle.0.speed-out-abs => scale-rpm.in
+# connect pwm to remora spindle pwm SP.0
+net spindle-speed-abs scale-rpm.out => remora.SP.0
+
+
+# Manual toolchange
+
+	loadusr -W hal_manualtoolchange
+	net tool-change iocontrol.0.tool-change => hal_manualtoolchange.change
+	net tool-changed iocontrol.0.tool-changed <= hal_manualtoolchange.changed
+	net tool-number iocontrol.0.tool-prep-number => hal_manualtoolchange.number
+	net tool-prepare-loopback iocontrol.0.tool-prepare => iocontrol.0.tool-prepared
+
+
+
+
+

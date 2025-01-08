@@ -1,0 +1,44 @@
+
+# load the realtime components PRUencoder and lowpass filter to smooth the incomiong velocity
+
+	loadrt PRUencoder names=encoderS0
+	loadrt lowpass names=lowpass.spindle-encoder-velocity
+# add the remora and motion functions to threads
+
+	addf PRUencoder.capture-position servo-thread
+	addf lowpass.spindle-encoder-velocity servo-thread
+
+
+#######################################################
+# spindle encoder
+#######################################################
+
+# scale encoder output to read in revolutions 
+setp encoderS0.position-scale [SPINDLE_0]ENCODER_SCALE
+setp lowpass.spindle-encoder-velocity.gain 0.001
+# connect the hal encoder to linuxcnc
+# connect encoder count to pv.5 
+net encoder-count <= remora.PV.5 => encoderS0.raw_count
+# connect encoder index/z 
+net encoder-phaseZ <= remora.input.15 => encoderS0.phase-Z
+
+#wip
+#######################################################
+# Beginning of threading related stuff  
+#######################################################
+# encoder reset control
+# hook up motion controller's sync output
+net spindle-index-enable encoderS0.index-enable <=> spindle.0.index-enable
+
+# report our revolution count to the motion controller
+net spindle-position encoderS0.position => spindle.0.revs
+
+#net spindle-velocity-feedback-rps encoderS0.velocity => spindle.0.speed-in
+net spindle-velocity-raw <= encoderS0.velocity => lowpass.spindle-encoder-velocity.in
+net spindle-velocity <= lowpass.spindle-encoder-velocity.out => spindle.0.speed-in #=> scale-rpm.in
+
+
+
+
+
+
