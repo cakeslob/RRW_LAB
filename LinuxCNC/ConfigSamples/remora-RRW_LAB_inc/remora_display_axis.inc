@@ -5,7 +5,7 @@ DISPLAY = axis
 
 USER_COMMAND_FILE = usercommand_regularmac_800.py
 
-#PYVCP = Probe_panel.xml
+PYVCP = Probe_panel.xml
 
 EDITOR = gedit
 POSITION_OFFSET = RELATIVE

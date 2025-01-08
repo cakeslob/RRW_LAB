@@ -1,7 +1,7 @@
 
 
-[DISPLAY]
-PYVCP = Probe_panel.xml
+#[DISPLAY]
+#PYVCP = Probe_panel.xml
 
 [RS274NGC]
 ## probne
