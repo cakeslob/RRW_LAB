@@ -1,29 +1,47 @@
 
-#######################################################
-# do the spindle stuff 
-#######################################################
+#########################################################################################
+#				Remora PRUencoder Spindle hal		remora_spindle.hal					#
+#																						#
+#		this hal file includes the following											#
+#	- connecting Remora outputs to LinuxCNC motion spindle.0 enable/direction			#
+#	- connecting spindle signals to LinuxCNC motion spindle.0 pins						#
+#	- converting the LinuxCNC motion spindle.0.speed-out-abs to signal with scale		#
+#	- connecting converted LinuxCNC motion spindle.0.speed-out-abs to Remora PWM		#
+#																						#
+#########################################################################################
 
-# need to fix
-# conenct remora out1 to spindle on
+# conenct LinuxCNC motion spindle.0 on/enable to remora output 01
 net spindle-on <= spindle.0.on => 	remora.output.01 
-# connect spindle stuff to linuxcnc
+# conenct LinuxCNC motion spindle.0 direction to remora output 02 
+net spindle-cw <= spindle.0.forward =>  remora.output.02 
+
+# connect spindle signals to LinuxCNC motion spindle.0
 net spindle-cmd-rpm     <= spindle.0.speed-out
-#net spindle-cmd-rpm-abs <= spindle.0.speed-out-abs
 net spindle-cmd-rps     <= spindle.0.speed-out-rps
 net spindle-cmd-rps-abs <= spindle.0.speed-out-rps-abs
 net spindle-at-speed    => spindle.0.at-speed
-net spindle-cw <= spindle.0.forward =>  remora.output.02 
 
-#spindle PWM 0-100 control
+### Connect and configure spindle PWM/0-10v signal   ###
+###########################################################
+# 			Spindle PWM 0-100 control
+# 	converting the LinuxCNC spindle speed output 
+# 	into a useable output signal for our remora pwm component 
+#	- for pwm the math is 100/ [MAX SPINDLE RPM] = gain
+#			 100/(5000rpm) = .02 , the gain is 0.02
+#	- for analog 0-10v the math is 10/ [MAX SPINDLE RPM] = gain
+#			 10/(5000rpm) = .002 , the gain is 0.002
+###########################################################
+
+# load a linuxCNC scale module, 
 loadrt scale names=scale_to_rpm.0,scale-rpm
 addf scale-rpm servo-thread
 # configure spindle rpm to pwm 
 # pwm 100 / max rpm = gain number 
 #setp scale-rpm.gain 0.02 # 100/ rpm (5000) = .02
 setp scale-rpm.gain [SPINDLE_0]RPM_GAIN # 100/ rpm (5000) = .02
-
+# connect the LinuxCNC motion spindle.0 speed-out-abs to the pwm scale
 net spindle-speed-scale spindle.0.speed-out-abs => scale-rpm.in
-# connect pwm to remora spindle pwm SP.0
+# connect pwm scale output to remora spindle pwm SP.0
 net spindle-speed-abs scale-rpm.out => remora.SP.0
 
 

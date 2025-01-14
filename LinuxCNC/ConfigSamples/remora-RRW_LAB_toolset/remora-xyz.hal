@@ -4,14 +4,11 @@
 	loadrt [KINS]KINEMATICS
 	loadrt [EMCMOT]EMCMOT base_period_nsec=[EMCMOT]BASE_PERIOD servo_period_nsec=[EMCMOT]SERVO_PERIOD num_joints=[KINS]JOINTS
 
-	#loadrt remora 
-
-	#loadrt remora-rpispi SPI_clk_div=32 PRU_base_freq=40000
-	loadrt remora chip_type=STM SPI_clk_div=32 PRU_base_freq=40000	
+	#load remora realtime component
+	loadrt remora-spi SPI_clk_div=32 PRU_base_freq=40000
+	#load remora PRUencoder component
 	loadrt PRUencoder names=encoderS0
 
-
-	
 
 # estop loopback, SPI comms enable and feedback
 	net user-enable-out 	<= iocontrol.0.user-enable-out		=> remora.SPI-enable
@@ -20,7 +17,6 @@
 	
 
 # add the remora and motion functions to threads
-
 	addf remora.read servo-thread
 	addf PRUencoder.capture-position servo-thread
 	addf motion-command-handler servo-thread
@@ -68,8 +64,6 @@
 	net j2enable 		<= joint.2.amp-enable-out 	=> remora.joint.2.enable
 
 
-
-
 #######################################################
 # end-stops and inputs
 #######################################################
@@ -87,79 +81,70 @@
 #######################################################
 
 	net j0enable => remora.output.00 	
-
 	#net OUT1 	remora.output.01 	#=> 
 	#net OUT2 	remora.output.02 	#=> 
 
 #######################################################
-# spindle encoder
+# spindle encoder with remora PRUencoder
+# note: this config is not using linuxCNC encoder comp,
+#  it is using remora PRUencoder comp
 #######################################################
 
-# scale encoder output to read in revolutions 
+# scale encoder output to read in revolutions , 
+# example 1024 encoder x4 = 4096, encoder scale = 4096
 setp encoderS0.position-scale [SPINDLE_0_ENCODER]ENCODER_SCALE
 
-# connect the hal encoder to linuxcnc
-# connect encoder count to pv.5 
+### connect the hal encoder to linuxcnc ###
+# connect PRUencoder rawcount to remora pv count
 net encoder-count <= remora.PV.5 => encoderS0.raw_count
-# connect encoder index/z 
+# connect PRUencoder index/z to remora input 
 net encoder-phaseZ <= remora.input.15 => encoderS0.phase-Z
 
 #######################################################
 # do the spindle stuff 
 #######################################################
 
-# need to fix
-# conenct remora out1 to spindle on
+# conenct remora output01 to linuxCNC spindle on/enable
 net spindle-on <= spindle.0.on => 	remora.output.01 
-# connect spindle stuff to linuxcnc
+# conenct remora out02 to spindle direction
+net spindle-cw <= spindle.0.forward =>  remora.output.02 
+
+# connect spindle signals to linuxCNC
 net spindle-cmd-rpm     <= spindle.0.speed-out
 #net spindle-cmd-rpm-abs <= spindle.0.speed-out-abs
 net spindle-cmd-rps     <= spindle.0.speed-out-rps
 net spindle-cmd-rps-abs <= spindle.0.speed-out-rps-abs
 net spindle-at-speed    => spindle.0.at-speed
-net spindle-cw <= spindle.0.forward =>  remora.output.02 
 
-#spindle PWM 0-100 control
+### Connect and configure spindle PWM/0-10v signal   ###
+
+# spindle PWM 0-100 control
+# load a linuxCNC scale module, 
 loadrt scale names=scale_to_rpm.0,scale-rpm
 addf scale-rpm servo-thread
 # configure spindle rpm to pwm 
 # pwm 100 / max rpm = gain number 
 setp scale-rpm.gain 0.02 # 100/ rpm (5000) = .02
 net spindle-speed-scale spindle.0.speed-out-abs => scale-rpm.in
-# connect pwm to remora spindle pwm SP.0
+# connect pwm scale to remora pwm SP.0 
 net spindle-speed-abs scale-rpm.out => remora.SP.0
 
-#wip
 #######################################################
 # Beginning of threading related stuff  
 #######################################################
 
-
-
 # encoder reset control
 # hook up motion controller's sync output
 net spindle-index-enable encoderS0.index-enable <=> spindle.0.index-enable
-
 # report our revolution count to the motion controller
 net spindle-position encoderS0.position => spindle.0.revs
 
-#net spindle-velocity-feedback-rps encoderS0.velocity => spindle.0.speed-in
-
-
-
-
-
+#####  spindle lowpass filter, to smooth velocity output
 loadrt lowpass names=lowpass.spindle-encoder-velocity
 addf lowpass.spindle-encoder-velocity servo-thread
-
 setp lowpass.spindle-encoder-velocity.gain 0.001
 net spindle-velocity-raw <= encoderS0.velocity => lowpass.spindle-encoder-velocity.in
-net spindle-velocity <= lowpass.spindle-encoder-velocity.out => spindle.0.speed-in #=> scale-rpm.in
-
-
-# create signals for tool loading loopback
-#net tool-prep-loop iocontrol.0.tool-prepare => iocontrol.0.tool-prepared
-#net tool-change-loop iocontrol.0.tool-change => iocontrol.0.tool-changed
+net spindle-velocity <= lowpass.spindle-encoder-velocity.out => spindle.0.speed-in
 
 # Manual toolchange
 
