@@ -1,12 +1,12 @@
 #########################################################################################
-#	Remora PRUencoder Spindle Encoder/Threading hal										#
-#		use this hal file with remora_spindle.hal										#
-#		this hal file includes the following											#
-#	- connecting Remora encoder to PRUencoder 											#
-#	- connecting PRUencoder to the LinuxCNC motion spindle.0 pins for threading			#
-#	- connecting the encoder input speed and filtering it through a lowpass filter		#
-#																						#
-#	note : this is not the LinuxCNC encoder comp										#
+#	Remora PRUencoder Spindle Encoder/Threading hal										
+#		use this hal file with remora_spindle.hal										
+#		this hal file includes the following											
+#	- connecting Remora encoder to PRUencoder 											
+#	- connecting PRUencoder to the LinuxCNC motion spindle.0 pins for threading			
+#	- connecting the encoder input speed and filtering it through a lowpass filter		
+#																						
+#	note : this is not the LinuxCNC encoder comp										
 #########################################################################################
 
 # load the realtime components PRUencoder and lowpass filter to smooth the incomiong velocity

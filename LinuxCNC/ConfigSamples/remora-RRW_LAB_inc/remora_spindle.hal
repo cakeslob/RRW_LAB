@@ -1,13 +1,13 @@
 
 #########################################################################################
-#				Remora PRUencoder Spindle hal		remora_spindle.hal					#
-#																						#
-#		this hal file includes the following											#
-#	- connecting Remora outputs to LinuxCNC motion spindle.0 enable/direction			#
-#	- connecting spindle signals to LinuxCNC motion spindle.0 pins						#
-#	- converting the LinuxCNC motion spindle.0.speed-out-abs to signal with scale		#
-#	- connecting converted LinuxCNC motion spindle.0.speed-out-abs to Remora PWM		#
-#																						#
+#				Remora PRUencoder Spindle hal		remora_spindle.hal					
+#																						
+#		this hal file includes the following											
+#	- connecting Remora outputs to LinuxCNC motion spindle.0 enable/direction			
+#	- connecting spindle signals to LinuxCNC motion spindle.0 pins						
+#	- converting the LinuxCNC motion spindle.0.speed-out-abs to signal with scale		
+#	- connecting converted LinuxCNC motion spindle.0.speed-out-abs to Remora PWM		
+#																						
 #########################################################################################
 
 # conenct LinuxCNC motion spindle.0 on/enable to remora output 01
