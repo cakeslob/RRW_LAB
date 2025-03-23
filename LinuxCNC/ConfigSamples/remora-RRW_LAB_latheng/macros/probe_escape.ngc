@@ -1,0 +1,8 @@
+o<probe_escape> sub
+
+M130 P254 (clear messages)
+#1999 = 0
+M130 P[#1999] (send state to hal)
+G92.1
+
+o<probe_escape> endsub

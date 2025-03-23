@@ -28,8 +28,6 @@ net spindle-at-speed    => spindle.0.at-speed
 # 	into a useable output signal for our remora pwm component 
 #	- for pwm the math is 100/ [MAX SPINDLE RPM] = gain
 #			 100/(5000rpm) = .02 , the gain is 0.02
-#	- for analog 0-10v the math is 10/ [MAX SPINDLE RPM] = gain
-#			 10/(5000rpm) = .002 , the gain is 0.002
 ###########################################################
 
 # load a linuxCNC scale module, 
