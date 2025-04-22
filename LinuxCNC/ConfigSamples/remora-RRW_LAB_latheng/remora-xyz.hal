@@ -4,14 +4,10 @@
 	loadrt [KINS]KINEMATICS
 	loadrt [EMCMOT]EMCMOT base_period_nsec=[EMCMOT]BASE_PERIOD servo_period_nsec=[EMCMOT]SERVO_PERIOD num_joints=[KINS]JOINTS
 
-	#loadrt remora 
+	#load the remora realtime comp 
 
 	loadrt remora-spi PRU_base_freq=40000
-	#loadrt remora chip_type=STM SPI_clk_div=32 PRU_base_freq=40000	
 	loadrt PRUencoder names=encoderS0
-
-
-	
 
 # estop loopback, SPI comms enable and feedback
 	net user-enable-out 	<= iocontrol.0.user-enable-out		=> remora.SPI-enable
@@ -77,8 +73,6 @@
 
 	net j0enable => remora.output.00 	
 
-	#net OUT1 	remora.output.01 	#=> 
-	#net OUT2 	remora.output.02 	#=> 
 
 #######################################################
 # spindle encoder
@@ -87,10 +81,10 @@
 # scale encoder output to read in revolutions 
 setp encoderS0.position-scale [SPINDLE_0_ENCODER]ENCODER_SCALE
 
-# connect the hal encoder to linuxcnc
-# connect encoder count to pv.5 
+###### connect the remora hardware pins encoder to PRUencoder #######
+# connect remora pv count to PRUencoder rawcount
 net encoder-count <= remora.PV.5 => encoderS0.raw_count
-# connect encoder index/z 
+# connect remora input to PRUencoder index/z 
 net encoder-phaseZ <= remora.input.15 => encoderS0.phase-Z
 
 #######################################################
@@ -100,7 +94,7 @@ net encoder-phaseZ <= remora.input.15 => encoderS0.phase-Z
 # need to fix
 # conenct remora out1 to spindle on
 net spindle-on <= spindle.0.on => 	remora.output.01 
-# connect spindle stuff to linuxcnc
+# connect spindle signals to LinuxCNC motion spindle.0
 net spindle-cmd-rpm     <= spindle.0.speed-out
 #net spindle-cmd-rpm-abs <= spindle.0.speed-out-abs
 net spindle-cmd-rps     <= spindle.0.speed-out-rps
@@ -108,14 +102,25 @@ net spindle-cmd-rps-abs <= spindle.0.speed-out-rps-abs
 net spindle-at-speed    => spindle.0.at-speed
 net spindle-cw <= spindle.0.forward =>  remora.output.02 
 
-#spindle PWM 0-100 control
+
+### Connect and configure spindle PWM/0-10v signal   ###
+###########################################################
+# 			Spindle PWM 0-100 control
+# 	converting the LinuxCNC spindle speed output 
+# 	into a useable output signal for our remora pwm component 
+#	- for pwm the math is 100/ [MAX SPINDLE RPM] = gain
+#			 100/(5000rpm) = .02 , the gain is 0.02
+###########################################################
+
+# load a linuxCNC scale module, 
 loadrt scale names=scale_to_rpm.0,scale-rpm
 addf scale-rpm servo-thread
 # configure spindle rpm to pwm 
 # pwm 100 / max rpm = gain number 
 setp scale-rpm.gain 0.02 # 100/ rpm (5000) = .02
+# connect the LinuxCNC motion spindle.0 speed-out-abs to the pwm scale
 net spindle-speed-scale spindle.0.speed-out-abs => scale-rpm.in
-# connect pwm to remora spindle pwm SP.0
+# connect pwm scale output to remora spindle pwm SP.0
 net spindle-speed-abs scale-rpm.out => remora.SP.0
 
 #wip
@@ -131,12 +136,6 @@ net spindle-index-enable encoderS0.index-enable <=> spindle.0.index-enable
 
 # report our revolution count to the motion controller
 net spindle-position encoderS0.position => spindle.0.revs
-
-#net spindle-velocity-feedback-rps encoderS0.velocity => spindle.0.speed-in
-
-
-
-
 
 loadrt lowpass names=lowpass.spindle-encoder-velocity
 addf lowpass.spindle-encoder-velocity servo-thread
